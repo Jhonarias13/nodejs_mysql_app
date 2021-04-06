@@ -7,17 +7,18 @@ const path = require('path');
 const app = express();
 
 // Settings
-app.set('port', process.env.PORT || 4000); // definir unpuerto, si existe un puerto tomalo , si no usa el 4000
+app.set('port', process.env.PORT || 4000); // definir un puerto, si existe un puerto tomalo , si no usa el 4000
 app.set('views', path.join(__dirname, 'views')); // le dice a node que la cparte views esta ahi
 
 app.engine('.hbs', exphbs({
     defaultLayout: 'main',
-    layaoutsDir: path.join(app.get('views'), 'layouts'),
+    layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir: path.join(app.get('views'), 'partials'),
-    exntname: '.hbs',
+    extname: '.hbs',
     helpers: require('./lib/handlebars')
-}));
-app.set('view engine', 'hbs');
+}))
+app.set('view engine', '.hbs');
+
 
 // Widdlwares: son funciones que se ejecutan cada vez que un cliente envia una peticion al servidor
 app.use(morgan('dev'));
@@ -35,7 +36,7 @@ app.use(require('./routes/authentication'));
 app.use('/links', require('./routes/links'));
 
 
-// Public: carpetas que el naveghador puede acceder
+// Public: carpetas que el navegador puede acceder
 
 app.use(express.static(path.join(__dirname, 'public')));
 

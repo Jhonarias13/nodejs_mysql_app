@@ -5,10 +5,13 @@ const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session');
+const passport = require('passport');
 
 const { database } = require('./keys');
+
 // Initializations 
 const app = express();
+require('./lib/passport');
 
 // Settings
 app.set('port', process.env.PORT || 4000); // definir un puerto, si existe un puerto tomalo , si no usa el 4000
@@ -35,11 +38,13 @@ app.use(flash()); // para enviar mensajes
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); // me permite enviar y recibir json desde otra aplicacion cliente
-
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Global variables
 app.use((req, res, next) => {
     app.locals.success = req.flash('success');
+    app.locals.message = req.flash('message');
     next();
 })
 
